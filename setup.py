@@ -7,7 +7,7 @@ def read(fname):
 
 
 extra = {}
-requirements = ['distribute', 'docutils', 'requests', 'docar'],
+requirements = ['distribute', 'docutils', 'requests', 'docar', 'pymongo'],
 tests_require = ['nose', 'coverage', 'Mock']
 
 setup(

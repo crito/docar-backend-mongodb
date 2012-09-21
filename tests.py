@@ -1,4 +1,5 @@
 from nose.tools import eq_
+from mock import patch, Mock
 
 # from docar.exceptions import BackendError
 from docar_backend_mongo import Connection
@@ -15,6 +16,7 @@ class describe_a_mongodb_connection_object(unittest.TestCase):
         Connection._connections = self.connections
 
     def it_has_default_values_for_some_connection_details(self):
+        """Most connection parameters have defaults."""
         class ConnectionA(Connection):
             name = 'A'
 
@@ -25,6 +27,7 @@ class describe_a_mongodb_connection_object(unittest.TestCase):
         eq_(None, ConnectionA.password)
 
     def it_adds_a_connections_configuration_to_the_connection_object(self):
+        """Every connection is stored on the Connection object."""
         class ConnectionB(Connection):
             name = 'B'
 
@@ -50,10 +53,27 @@ class describe_a_mongodb_connection_object(unittest.TestCase):
         eq_(2, len(Connection._connections.keys()))
 
     def it_can_return_the_correct_connection(self):
-        """Creating a connection object returns None or the connection."""
+        """Creating a connection object returns None or the pymongo connection
+        object."""
+        # Access the default connection handler
         class ConnectionF(Connection):
             name = 'F'
 
-        connection = Connection()
+        with patch('docar_backend_mongo.pymongo') as mock_mongo:
+            mongo_con = Mock()
+            mock_mongo.Connection.return_value = {'F': mongo_con}
+            connection = Connection()
 
-        eq_(True, isinstance(connection, ConnectionF))
+        eq_(mongo_con, connection)
+
+        # Now access the connection handler per id
+        class ConnectionG(Connection):
+            name = 'G'
+            id = 'id_G'
+
+        with patch('docar_backend_mongo.pymongo') as mock_mongo:
+            mongo_con = Mock()
+            mock_mongo.Connection.return_value = {'G': mongo_con}
+            connection = Connection('id_G')
+
+        eq_(mongo_con, connection)
