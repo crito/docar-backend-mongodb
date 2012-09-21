@@ -1,3 +1,4 @@
+from docar.backends import BackendMeta
 from docar.exceptions import BackendError
 
 import pymongo
@@ -78,3 +79,31 @@ class Connection(object):
             # FIXME: Maybe raise an exception here?
             pass
         return connection
+
+
+# class MongoBackend(object):
+#     __metaclass__ = BackendMeta
+#     backend_type = 'mongo'
+
+#     def fetch(self, document, *args, **kwargs):
+#         pass
+
+#     def save(self, documents, data, *args, **kwargs):
+#         pass
+
+#     def delete(self, document, *args, **kwargs):
+#         pass
+
+
+class MongoBackend(object):
+    __metaclass__ = BackendMeta
+    backend_type = 'mongo'
+
+    def fetch(self, document, *args, **kwargs):
+        pass
+
+    def save(self, documents, data, *args, **kwargs):
+        pass
+
+    def delete(self, document, *args, **kwargs):
+        pass
