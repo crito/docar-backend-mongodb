@@ -1,4 +1,4 @@
-from docar.backends import BackendMeta
+from docar.backends import Backend
 from docar.exceptions import BackendError
 
 import pymongo
@@ -10,7 +10,7 @@ class ConnectionMeta(type):
 
         # We don't do anything special when the normal Connection class is
         # defined
-        if classname == 'Connection':
+        if classname == 'Connection' or classname == 'ConnectionBase':
             return klass
 
         # Every connection handler must have the dbname configured.
@@ -30,7 +30,10 @@ class ConnectionMeta(type):
         return klass
 
 
-class Connection(object):
+ConnectionBase = ConnectionMeta('ConnectionBase', (object,), {})
+
+
+class Connection(ConnectionBase):
     """Get the correct mongodb connection handler.
 
     To define a connection handler, write a class that inerits from
@@ -56,8 +59,6 @@ class Connection(object):
         True
 
     """
-    __metaclass__ = ConnectionMeta
-
     _connections = {}
 
     id = None
@@ -95,14 +96,13 @@ class Connection(object):
 #         pass
 
 
-class MongoBackend(object):
-    __metaclass__ = BackendMeta
+class MongoBackend(Backend):
     backend_type = 'mongo'
 
     def fetch(self, document, *args, **kwargs):
         pass
 
-    def save(self, documents, data, *args, **kwargs):
+    def save(self, document, data, *args, **kwargs):
         pass
 
     def delete(self, document, *args, **kwargs):

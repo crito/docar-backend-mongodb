@@ -1,5 +1,6 @@
 from setuptools import setup
 import os
+import sys
 
 
 def read(fname):
@@ -7,16 +8,18 @@ def read(fname):
 
 
 extra = {}
-requirements = ['distribute', 'docutils', 'requests', 'docar', 'pymongo'],
+requirements = ['requests', 'docar', 'pymongo'],
 tests_require = ['nose', 'coverage', 'Mock']
 
+# In case we use python3
+if sys.version_info >= (3, 0):
+    extra.update(use_2to3=True)
+
 setup(
-    name="docar_backend_mongo",
+    name="docar_backend_mongodb",
     version="0.1",
-    packages=['docar_backend_mongo'],
+    packages=['docar_backend_mongodb'],
     include_package_data=True,
-    #zip_safe=False,  # Don't create egg files, Django cannot find templates
-                     # in egg files.
     install_requires=requirements,
     tests_require=tests_require,
     setup_requires='nose',
@@ -25,7 +28,7 @@ setup(
 
     author="Christo Buschek",
     author_email="crito@30loops.net",
-    url="https://github.com/30loops/docar-backend-mongo",
+    url="https://github.com/crito/docar-backend-mongodb",
     description="Map docar documents to a MongoDB database.",
     long_description=read('README.rst'),
     classifiers=[

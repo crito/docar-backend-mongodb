@@ -2,7 +2,7 @@ from nose.tools import eq_
 from mock import patch, Mock
 
 # from docar.exceptions import BackendError
-from docar_backend_mongo import Connection
+from docar_backend_mongodb import Connection
 
 import unittest
 
@@ -59,7 +59,7 @@ class describe_a_mongodb_connection_object(unittest.TestCase):
         class ConnectionF(Connection):
             name = 'F'
 
-        with patch('docar_backend_mongo.pymongo') as mock_mongo:
+        with patch('docar_backend_mongodb.pymongo') as mock_mongo:
             mongo_con = Mock()
             mock_mongo.Connection.return_value = {'F': mongo_con}
             connection = Connection()
@@ -71,7 +71,7 @@ class describe_a_mongodb_connection_object(unittest.TestCase):
             name = 'G'
             id = 'id_G'
 
-        with patch('docar_backend_mongo.pymongo') as mock_mongo:
+        with patch('docar_backend_mongodb.pymongo') as mock_mongo:
             mongo_con = Mock()
             mock_mongo.Connection.return_value = {'G': mongo_con}
             connection = Connection('id_G')
